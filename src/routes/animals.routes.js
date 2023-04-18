@@ -7,9 +7,11 @@ import {
   deleteOneAnimal,
 } from '../controllers/animals.controller.js';
 
+import { isAuth } from '../middlewares/auth.js';
+
 const animalsRouter = Router();
 
-animalsRouter.get('/', getAllAnimals);
+animalsRouter.get('/', isAuth, getAllAnimals);
 animalsRouter.get('/:id', getOneAnimal);
 animalsRouter.post('/addOneAnimal', createOneAnimal);
 animalsRouter.patch('/modifyOneAnimal/:id', modifyOneAnimal);
