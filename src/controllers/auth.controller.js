@@ -70,7 +70,17 @@ export const login = async (req, res) => {
       req.session.isAuth = true;
       console.log(req.session);
       console.log(req.session.id);
-      return res.status(200).send('login success');
+      const token = req.session.id;
+      return res
+        .cookie('token', token, {
+          httpOnly: true,
+          sameSite: 'none',
+          secure: true,
+          maxAge: 10000,
+        })
+        .status(200)
+        .json({ token });
+      // return res.status(200).send('login success');
     } else return res.status(403).send('wrong credentials');
   } catch (error) {
     console.error(error);
