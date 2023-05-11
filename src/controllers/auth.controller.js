@@ -2,6 +2,7 @@ import { db } from '../firebase.js';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const argon2 = require('argon2');
+const JWT = require('jsonwebtoken');
 
 /* User Authentification controller */
 
@@ -67,20 +68,10 @@ export const login = async (req, res) => {
     const hashedPassword = verifyUser[0].password;
     const verifyPassword = await argon2.verify(hashedPassword, password);
     if (verifyPassword) {
-      req.session.isAuth = true;
-      console.log(req.session);
-      console.log(req.session.id);
-      const token = req.session.id;
-      return res
-        .cookie('token', token, {
-          httpOnly: true,
-          sameSite: 'none',
-          secure: true,
-          maxAge: 10000,
-        })
-        .status(200)
-        .json({ token });
-      // return res.status(200).send('login success');
+      const token = JWT.sign({ pseudo: pseudo }, process.env.JWT_PRIVATE_KEY, {
+        expiresIn: '15s',
+      });
+      return res.status(200).json({ token: token });
     } else return res.status(403).send('wrong credentials');
   } catch (error) {
     console.error(error);
@@ -91,13 +82,7 @@ export const login = async (req, res) => {
 // Logout function
 
 export const logout = async (req, res) => {
-  const id = req.session.id;
-  console.log(id);
-  console.log(req.session);
   try {
-    await req.session.destroy((err) => {
-      if (err) throw err;
-    });
     res.status(200).send('logout success');
   } catch (error) {
     console.error(error);

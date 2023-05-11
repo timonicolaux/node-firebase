@@ -13,8 +13,8 @@ const animalsRouter = Router();
 
 animalsRouter.get('/', isAuth, getAllAnimals);
 animalsRouter.get('/:id', getOneAnimal);
-animalsRouter.post('/addOneAnimal', createOneAnimal);
-animalsRouter.patch('/modifyOneAnimal/:id', modifyOneAnimal);
-animalsRouter.delete('/deleteOneAnimal/:id', deleteOneAnimal);
+animalsRouter.post('/addOneAnimal', isAuth, createOneAnimal);
+animalsRouter.patch('/modifyOneAnimal/:id', isAuth, modifyOneAnimal);
+animalsRouter.delete('/deleteOneAnimal/:id', isAuth, deleteOneAnimal);
 
 export default animalsRouter;

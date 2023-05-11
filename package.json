@@ -23,6 +23,7 @@
     "express-session": "^1.17.3",
     "firebase-admin": "^11.6.0",
     "firestore-store": "^2.0.2",
+    "jsonwebtoken": "^9.0.0",
     "mysql2": "^2.3.3"
   },
   "devDependencies": {
